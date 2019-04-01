@@ -1,0 +1,72 @@
+.single-board {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.single-board-bg {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 110%;
+        height: 110%;
+        object-fit: cover;
+        display: block;
+        z-index: -1;
+    }
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+}
+
+.single-board-content {
+    width: 100%;
+    height: calc(100vh - 80px);
+    white-space: nowrap;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 80px;
+    padding: 10px;
+    z-index: 7;
+    overflow-x: auto;
+    overflow-y: hidden;
+    &::-webkit-scrollbar {
+        height: 12px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+.single-board-list-loading {
+    width: 270px;
+    display: inline-block;
+    min-height: 40px;
+    border-radius: 3px;
+    background-color: #d4d8db;
+    padding: 3px 0;
+    margin: 0 10px 0 0;
+}

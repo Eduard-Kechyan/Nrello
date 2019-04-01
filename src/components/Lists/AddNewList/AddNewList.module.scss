@@ -1,0 +1,102 @@
+.add-list {
+    width: 270px;
+    display: inline-block;
+    vertical-align: top;
+    min-height: 40px;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: .3s;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    &:focus-within {
+        background-color: #d4d8db;
+        div {
+            padding: 0 5px 5px 5px;
+            height: auto;
+        }
+    }
+    label {
+        width: 100%;
+        height: 40px;
+        padding: 5px;
+        margin: 0;
+        position: relative;
+        &:focus-within {
+            height: 45px;
+            p {
+                display: none;
+            }
+            input {
+                position: relative;
+                height: 35px;
+                padding: 0 10px;
+                border: 2px solid #007bff;
+                border-radius: 2px;
+            }
+        }
+        p {
+            color: white;
+            cursor: pointer;
+            opacity: 0.7;
+            line-height: 30px;
+            width: 100%;
+            padding: 0 15px;
+            margin: 0 0 5px 0;
+            font-size: 14px;
+        }
+        input {
+            position: absolute;
+            height: 0;
+            padding: 0;
+            border: none;
+            width: 100%;
+            font-size: 14px;
+            &::placeholder {
+                color: #777777;
+            }
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+    div {
+        position: relative;
+        padding: 0 5px;
+        width: 100%;
+        transition: .3s;
+        height: 0;
+        overflow: hidden;
+        button {
+            font-size: 14px;
+            color: white;
+            border-radius: 3px;
+            background-color: #28a745;
+            height: 30px;
+            border: none;
+            transition: .3s;
+            &:hover {
+                background-color: #218838;
+            }
+            &:focus {
+                outline: none;
+            }
+            &:disabled {
+                background-color: #b4b4b4;
+            }
+        }
+    }
+}
+
+.add-cancel {
+    position: absolute;
+    left: 85px;
+    top: -9px;
+    font-size: 30px;
+    cursor: pointer;
+    transition: .3s;
+    color: #798d99;
+    &:hover {
+        color: #536169;
+    }
+}

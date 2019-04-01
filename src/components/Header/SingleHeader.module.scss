@@ -1,0 +1,36 @@
+.single-header{
+    height: 40px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 40px;
+    padding: 5px;
+    z-index: 8;
+    background-color: rgba(0,0,0,0.2);
+    h2{
+        color: white;
+        font-size: 16px;
+        line-height: 30px;
+        margin: 0 20px 0 0;
+    }
+    button{
+        min-width: 30px;
+        height: 30px;
+        border-radius: 3px;
+        display: block;
+        border: none;
+        transition: .3s;
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        font-size: 16px;
+        padding: 5px;
+        line-height: initial;
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+}
