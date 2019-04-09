@@ -13,9 +13,9 @@ const initialState = {
     },
     singleBoardLoading: false,
     listLoading: false,
-    listToRemove: {
+    listToChange: {
         loading: false,
-        boardId: null
+        listId: null
     },
 
 
@@ -101,7 +101,6 @@ const boards = (state = initialState, action) => {
                 singleBoardLoading: false
             };
         case Actions.FETCH_SINGLE_BOARD_SUCCESS:
-            console.log(action.data);
             return {
                 ...state,
                 singleBoardLoading: false,
@@ -133,29 +132,90 @@ const boards = (state = initialState, action) => {
         case Actions.REMOVE_LIST_START:
             return {
                 ...state,
-                listToRemove: {
+                listToChange: {
                     loading: true,
-                    boardId: action.id
+                    listId: action.id
                 }
             };
         case Actions.REMOVE_LIST_FAIL:
             return {
                 ...state,
-                listToRemove: {
+                listToChange: {
                     loading: false,
-                    boardId: null
+                    listId: null
                 }
             };
         case Actions.REMOVE_LIST_SUCCESS:
             return {
                 ...state,
-                listToRemove: {
+                listToChange: {
                     loading: false,
-                    boardId: null
+                    listId: null
                 },
                 singleBoard: {
                     ...state.singleBoard,
                     lists: state.singleBoard.lists.filter(item => item.id !== action.id)
+                }
+            };
+        case Actions.EDIT_LIST_START:
+            return {
+                ...state,
+                listToChange: {
+                    loading: true,
+                    listId: action.id
+                }
+            };
+        case Actions.EDIT_LIST_FAIL:
+            return {
+                ...state,
+                listToChange: {
+                    loading: false,
+                    listId: null
+                }
+            };
+        case Actions.EDIT_LIST_SUCCESS:
+            let listItem = state.singleBoard.lists.filter(item => item.id === action.id);
+            listItem[0].name = action.newName;
+
+            return {
+                ...state,
+                listToChange: {
+                    loading: false,
+                    listId: null
+                },
+                singleBoard: {
+                    ...state.singleBoard,
+                }
+            };
+        //Card
+        case Actions.ADD_CARD_START:
+            return {
+                ...state,
+                listToChange: {
+                    loading: true,
+                    listId: action.id
+                }
+            };
+        case Actions.ADD_CARD_FAIL:
+            return {
+                ...state,
+                listToChange: {
+                    loading: false,
+                    listId: null
+                },
+            };
+        case Actions.ADD_CARD_SUCCESS:
+            let listItemToChange = state.singleBoard.lists.filter(item => item.id === action.listId);
+            listItemToChange[0].cards = listItemToChange[0].cards.concat(action.newCard);
+
+            return {
+                ...state,
+                listToChange: {
+                    loading: false,
+                    listId: null
+                },
+                singleBoard: {
+                    ...state.singleBoard,
                 }
             };
 

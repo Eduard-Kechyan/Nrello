@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import styles from './ListItem.module.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-/*import {addCard, remove, removeCard} from "../../../store/index";*/
-import {removeList} from "../../../store/index";
+import {removeList, editListName, addCard} from "../../../store/index";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router";
 import Spinner from "../../UI/Spinner/Spinner";
@@ -15,6 +14,14 @@ class ListItem extends Component {
     handleListItem = (id) => {
         if (window.confirm("Are you sure you want to delete this list? It can't be undone!")) {
             this.props.removeList(id, this.props.singleBoard.boardId);
+        }
+    };
+
+    editListItem = (id) => {
+        let name = window.prompt("Type in new list name:");
+
+        if (name !== '' && name !== null) {
+            this.props.editListName(name, id, this.props.singleBoard.boardId)
         }
     };
 
@@ -31,52 +38,28 @@ class ListItem extends Component {
         }
 
         if (this.state.newCardName !== '') {
-            this.props.addCard(this.state.newCardName, this.props.list.id);
+            this.props.addCard(this.state.newCardName, this.props.singleBoard.boardId, this.props.list.id);
             this.setState({newCardName: ''});
         }
     };
 
     render() {
-        let cards = (
-            <div className={styles["list-item-wrapper"]}>
-                <div className={styles["list-item-content"]}>
-                    <Spinner/>
+        let cards = null;
+
+        if (this.props.listToChange.listId === this.props.list.id) {
+            cards = <Spinner/>;
+        } else if (this.props.list.cards !== undefined) {
+            cards = (
+                <div className={styles["list-item-wrapper"]}>
+                    <div className={styles["list-item-content"]}>
+                        {this.props.list.cards.map(card => (
+                            <p key={card.name}>{card.name}</p>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        );
-
-        if (!this.props.cardsLoading) {
-            if (this.props.cards.length > 0) {
-                cards = (
-                    <div className={styles["list-item-wrapper"]}>
-                        <div className={styles["list-item-content"]}>
-                            {this.props.cards.map(card => {
-                                if (card.parentId === this.props.list.id) {
-                                    return <p
-                                        onClick={() => this.props.removeCard(card.id, this.props.list.id)}
-                                        key={card.id}> {card.name} </p>;
-                                } else {
-                                    return null;
-                                }
-                            })}
-                        </div>
-                    </div>
-                )
-            } else {
-                cards = null;
-            }
-        }
-
-        if (this.props.cardsSingle.loading) {
-            if (this.props.cardsSingle.listId === this.props.list.id) {
-                cards = (
-                    <div className={styles["list-item-wrapper"]}>
-                        <div className={styles["list-item-content"]}>
-                            <Spinner/>
-                        </div>
-                    </div>
-                );
-            }
+            )
+        } else {
+            cards = null;
         }
 
         return (
@@ -84,7 +67,7 @@ class ListItem extends Component {
                 <div className={[styles["list-item-header"], 'd-flex'].join(' ')}>
                     <p className='mr-auto' title={this.props.list.name}>
                         {this.props.list.name}
-                        <span onClick={() => this.props.editListName('Test 001', this.props.list.id)}>
+                        <span onClick={() => this.editListItem(this.props.list.id)}>
                             <FontAwesomeIcon icon='edit' size='1x'/>
                         </span>
                     </p>
@@ -118,19 +101,16 @@ class ListItem extends Component {
 const stateToProps = state => {
     return {
         singleBoard: state.singleBoard,
-        cards: state.cards,
-        cardsLoading: state.cardsLoading,
-        cardsSingle: state.cardsSingle,
+        singleBoardLoading: state.singleBoardLoading,
+        listToChange: state.listToChange,
     }
 };
 
 const dispatchToProps = dispatch => {
     return {
         removeList: (listId, boardId) => dispatch(removeList(listId, boardId)),
-        /*addCard: (name, listId) => dispatch(addCard(name, listId)),
-        remove: (target, id) => dispatch(remove(target, id)),
-        removeCard: (cardId, listId) => dispatch(removeCard(cardId, listId)),
-        editListName: (newName, listId) => dispatch(editListName(newName, listId)),*/
+        editListName: (newName, listId, boardId) => dispatch(editListName(newName, listId, boardId)),
+        addCard: (name, boardId, listId) => dispatch(addCard(name, boardId, listId)),
     }
 };
 

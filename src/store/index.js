@@ -1,1 +1,10 @@
-export {fetchBoard, addBoard, removeBoard, fetchSingleBoard, addList, removeList} from './actions';
+export {
+    fetchBoard,
+    addBoard,
+    removeBoard,
+    fetchSingleBoard,
+    addList,
+    removeList,
+    editListName,
+    addCard
+}from './actions';
