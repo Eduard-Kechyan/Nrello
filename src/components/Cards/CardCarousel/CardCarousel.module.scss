@@ -1,0 +1,128 @@
+.card-carousel {
+    width: 100%;
+    min-height: 50px;
+    max-height: 393.75px;
+    overflow: hidden;
+    position: relative;
+    padding: 56.25% 0 0 0;
+    border-radius: 3px;
+    margin: 0 0 10px 0;
+}
+
+.card-carousel-item {
+    width: 100%;
+    background-color: #777;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s;
+        img {
+            user-select: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            z-index: 2;
+    }
+    div {
+        position: absolute;
+        right: 50px;
+        top: 15px;
+        z-index: 3;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        transition: .3s;
+        &:hover {
+            color: #dc3545;
+        }
+    }
+}
+
+.card-carousel-item-selected {
+    opacity: 1;
+    visibility: visible;
+}
+
+.card-c-arrow {
+    position: absolute;
+    z-index: 4;
+    width: 30px;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    background-color: transparent;
+    transition: .3s;
+    cursor: pointer;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+        span {
+            color: rgba(255, 255, 255, 1);
+        }
+    }
+    span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 22px;
+        transition: .3s;
+        user-select: none;
+    }
+}
+
+.card-c-left {
+    left: 0;
+}
+
+.card-c-right {
+    right: 0;
+}
+
+.card-carousel-dots {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    transition: .3s;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+    span {
+        background-color: white;
+        margin: 0 5px;
+        line-height: 7px;
+        font-size: 30px;
+        cursor: pointer;
+        transition: .3s;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        border: 1px solid white;
+        p {
+            display: none;
+        }
+        &:hover {
+            background-color: #222;
+            border-color: white;
+        }
+    }
+    .card-c-dot-selected {
+        background-color: #222;
+    }
+}

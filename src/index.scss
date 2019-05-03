@@ -40,8 +40,10 @@ header {
 
 .header-boards {
     background-color: #28a745;
-    .header-btn{
+
+    .header-btn {
         background-color: rgba(0, 0, 0, 0.2);
+
         &:hover {
             background-color: rgba(0, 0, 0, 0.3);
         }
@@ -50,6 +52,7 @@ header {
 
 .header-closed {
     left: 250px;
+
     .header-btn-add {
         opacity: 0;
         visibility: hidden;
@@ -71,13 +74,16 @@ header {
     margin: 0 2.5px;
     padding: 5px;
     line-height: initial;
+
     span {
         margin: 0 5px 0 0;
     }
+
     &:hover {
         background-color: rgba(255, 255, 255, 0.3);
         color: white;
     }
+
     &:focus {
         outline: none;
     }
@@ -100,6 +106,7 @@ header {
     margin: 0 2.5px;
     overflow: hidden;
     position: relative;
+
     img {
         position: absolute;
         left: 50%;
@@ -120,6 +127,7 @@ header {
     font-size: 24px;
     margin: 0;
     line-height: initial;
+
     &:hover {
         color: white;
         text-decoration: none;
@@ -127,6 +135,17 @@ header {
 }
 
 //Modal
+.modal-backdrop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+    transition: .3s;
+}
+
 .board-modal {
     position: fixed;
     left: 0;
@@ -160,6 +179,7 @@ header {
     overflow: hidden;
     position: relative;
     padding: 10px;
+
     img {
         position: absolute;
         left: 50%;
@@ -171,6 +191,7 @@ header {
         display: block;
         z-index: 1;
     }
+
     .board-close {
         color: white;
         position: absolute;
@@ -180,6 +201,7 @@ header {
         font-size: 22px;
         cursor: pointer;
     }
+
     &:after {
         position: absolute;
         left: 0;
@@ -190,6 +212,7 @@ header {
         background-color: rgba(0, 0, 0, 0.2);
         z-index: 2;
     }
+
     input {
         position: relative;
         z-index: 4;
@@ -201,26 +224,29 @@ header {
         color: white;
         padding: 0 5px;
         transition: .3s;
-        &::placeholder{
-            color: rgba(255,255,255,0.7);
+
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
-        &:hover{
-            background-color: rgba(255,255,255,0.2);
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
-        &:focus{
+
+        &:focus {
             outline: none;
-            background-color: rgba(255,255,255,0.4);
+            background-color: rgba(255, 255, 255, 0.4);
         }
     }
 }
 
-.board-modal-add-image{
+.board-modal-add-image {
     width: 105px;
     height: 100px;
     padding: 0 0 0 5px;
 }
 
-.board-modal-add-image-item{
+.board-modal-add-image-item {
     width: 30px;
     height: 30px;
     border-radius: 3px;
@@ -229,12 +255,14 @@ header {
     overflow: hidden;
     cursor: pointer;
     transition: .3s;
-    &:hover{
+
+    &:hover {
         &:after {
             opacity: 0;
         }
     }
-    img{
+
+    img {
         position: absolute;
         left: 50%;
         top: 50%;
@@ -245,6 +273,7 @@ header {
         display: block;
         z-index: 1;
     }
+
     &:after {
         position: absolute;
         left: 0;
@@ -258,43 +287,298 @@ header {
     }
 }
 
-.board-modal-add-image-item-selected{
+.board-modal-add-image-item-selected {
     border: 1px solid white;
+
     &:after {
         opacity: 0;
     }
 }
 
-.board-modal-add-btn{
+.board-modal-add-btn {
     width: 100%;
     padding: 15px 0;
-    button{
+
+    button {
         border-radius: 3px;
         border: none;
         background-color: $green;
         color: white;
         padding: 4px 10px;
         transition: .3s;
-        &:hover{
+
+        &:hover {
             background-color: #1f8336;
         }
-        &:focus{
+
+        &:focus {
             outline: none;
         }
-        &:disabled{
+
+        &:disabled {
             background-color: white;
             color: #777;
         }
     }
 }
 
-.board-modal-backdrop {
-    position: absolute;
+.card-modal {
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: -1;
+    z-index: 25;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.card-modal-show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.card-modal-content {
+    width: 100%;
+    max-width: 750px;
+    margin: 50px auto;
+    background-color: white;
+    border-radius: 3px;
+    position: relative;
+}
+
+.card-modal-content-spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.card-modal-header {
+    padding: 10px 15px;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    input {
+        font-size: 18px;
+        border-radius: 3px;
+        border: 1px solid transparent;
+        background-color: transparent;
+        padding: 0;
+        width: 300px;
+        height: 30px;
+        margin: 0;
+        transition: .3s;
+        cursor: pointer;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 0 5px;
+        }
+        &:focus {
+            padding: 0 5px;
+            outline: none;
+            border: 1px solid #777;
+            background-color: white;
+            cursor: text;
+            &:hover {
+                background-color: white;
+            }
+        }
+    }
+}
+
+.card-modal-close {
+    position: absolute;
+    right: 15px;
+    top: -3px;
+    font-size: 36px;
+    color: #222;
+    cursor: pointer;
     transition: .3s;
+    &:hover {
+        color: $red;
+    }
+}
+
+.card-modal-body {
+    padding: 10px 10px 10px 15px;
+    min-height: 150px;
+    max-height: calc(100vh - 100px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 3px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: #bbb;
+    }
+    label {
+        width: 100%;
+        p {
+            font-size: 18px;
+            color: #222;
+            margin: 0;
+            span {
+                color: #777;
+            }
+        }
+        textarea {
+            width: 100%;
+            border: 1px solid transparent;
+            transition: .3s;
+            cursor: pointer;
+            border-radius: 3px;
+            background-color: transparent;
+            padding: 0;
+            min-height: 70px;
+            max-height: 200px;
+            font-size: 16px;
+            color: #777;
+            &:hover {
+                background-color: #ccc;
+                padding: 0 5px;
+            }
+            &:focus {
+                outline: none;
+                padding: 0 5px;
+                border: 1px solid #777;
+                background-color: #bbb;
+                cursor: text;
+                color: white;
+                &:hover {
+                    background-color: #bbb;
+                }
+            }
+        }
+    }
+    button {
+        border-radius: 3px;
+        border: 1px solid transparent;
+        background-color: $green;
+        color: white;
+        padding: 2px 10px;
+        font-size: 16px;
+        transition: .3s;
+        &:focus {
+            outline: none;
+        }
+        &:hover {
+            background-color: #228f3b;
+        }
+        &:disabled {
+            background-color: #ccc;
+        }
+    }
+    h4 {
+        border-radius: 3px;
+        border: 1px solid transparent;
+        background-color: #222;
+        color: white;
+        padding: 0 10px;
+        font-size: 16px;
+        transition: .3s;
+        line-height: 30px;
+        margin: 0;
+        display: inline-block;
+    }
+}
+
+.card-modal-images {
+    width: 100%;
+    margin: 0 0 10px 0;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    border-radius: 3px;
+    min-height: 50px;
+    form {
+        label {
+            display: block;
+            margin: 0 auto;
+            width: 110px;
+            &:focus-within {
+                .card-modal-images-add-input {
+                    padding: 10px 0 0 0;
+                    height: 40px;
+                }
+            }
+            .add {
+                background-color: $green;
+                text-align: center;
+                color: white;
+                cursor: pointer;
+                transition: .3s;
+                padding: 0;
+                height: 30px;
+                width: 110px;
+                line-height: 30px;
+                font-size: 14px;
+                border-radius: 3px;
+                display: inline-block;
+                &:hover {
+                    background-color: #228f3b;
+                    span {
+                        color: #145323;
+                    }
+                }
+                span {
+                    color: #1d7832;
+                    transition: .3s;
+                    font-size: 16px;
+                }
+            }
+            input {
+                opacity: 0;
+                height: 0;
+                width: 0;
+            }
+            &.image-selected {
+                margin: 0;
+            }
+        }
+    }
+}
+
+.card-modal-images-new {
+    width: 100%;
+    border-radius: 8px;
+    margin: 0 0 10px 0;
+    border: 2px solid black;
+    div {
+        position: relative;
+        width: 100%;
+        border: 2px solid white;
+        border-radius: 7px;
+        overflow: hidden;
+        span {
+            position: absolute;
+            border-radius: 3px;
+            display: inline-block;
+            padding: 2px 10px;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 14px;
+            background-color: #222;
+            border: 2px solid white;
+            em {
+                color: $green;
+                margin: 0 3px;
+                font-style: normal;
+            }
+            &:last-child {
+                top: auto;
+                bottom: 10px;
+            }
+        }
+        img {
+            width: 100%;
+        }
+    }
 }

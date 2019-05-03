@@ -167,7 +167,7 @@ export const fetchSingleBoard = (id) => {
                     if (fetchedLists[listKey].cards !== undefined) {
                         for (let cardKey in fetchedLists[listKey].cards) {
                             fetchedCards.push({
-                                ...fetchedLists[listKey].cards[cardKey],
+                                name: fetchedLists[listKey].cards[cardKey].name,
                                 id: cardKey
                             });
                         }
@@ -219,7 +219,8 @@ export const addList = (name, boardId) => {
         dispatch(addListStart());
 
         const list = {
-            name: name
+            name: name,
+            cards: []
         };
 
         axios.post('/boards/' + boardId + '/lists/.json', list)
@@ -295,11 +296,7 @@ export const editListName = (newName, listId, boardId) => {
     return dispatch => {
         dispatch(editListNameStart(listId));
 
-        let newNameItem = {
-            name: newName
-        };
-
-        axios.put('/boards/' + boardId + '/lists/' + listId + '/.json', newNameItem)
+        axios.patch('/boards/' + boardId + '/lists/' + listId + '.json', {"name": newName})
             .then(response => {
                 dispatch(editListNameSuccess(newName, listId));
             })
@@ -341,7 +338,10 @@ export const addCard = (name, boardId, listId) => {
         dispatch(addCardStart(listId));
 
         const card = {
-            name: name
+            name: name,
+            desc: 'Description!',
+            images: [],
+            newImage: null
         };
 
         axios.post('/boards/' + boardId + '/lists/' + listId + '/cards/.json', card)
@@ -355,246 +355,187 @@ export const addCard = (name, boardId, listId) => {
 };
 
 
-//Start and fail
-const start = (target, id) => {
+const openCardModalStart = () => {
     return {
-        type: Actions.START,
-        target: target,
-        id: id,
+        type: Actions.OPEN_CARD_MODAL_START
     };
 };
 
-const fail = (error, target) => {
+const openCardModalFail = (error) => {
     return {
-        type: Actions.FAIL,
+        type: Actions.OPEN_CARD_MODAL_FAIL,
         error: error,
-        target: target,
     };
 };
 
-//Fetch
-const fetchSuccess = (target, data) => {
+const openCardModalSuccess = (cardId, listId, listName, cardData) => {
     return {
-        type: Actions.FETCH,
-        data: data,
-        target: target,
+        type: Actions.OPEN_CARD_MODAL_SUCCESS,
+        cardId: cardId,
+        listId: listId,
+        listName: listName,
+        cardData: cardData
     };
 };
 
-export const fetch = (target, id) => {
+export const openCardModal = (boardId, listId, listName, cardId) => {
     return dispatch => {
-        dispatch(start(target));
+        dispatch(openCardModalStart());
 
-        if (target === 'single') {
-            axios.get(`/boards/${id}.json`)
-                .then(response => {
-                    dispatch(fetchSuccess(target, response.data));
-                })
-                .catch(error => {
-                    dispatch(fail(error, target));
-                });
-        } else {
-            axios.get('/' + target + '.json')
-                .then(response => {
-                    const fetchedData = [];
-                    for (let key in response.data) {
-                        fetchedData.push({
-                            ...response.data[key],
-                            id: key
+        axios.get('/boards/' + boardId + '/lists/' + listId + '/cards/' + cardId + '.json')
+            .then(response => {
+                let fetchedData = response.data;
+
+                if (fetchedData.images !== undefined) {
+                    const fetchedImages = [];
+
+                    for (let key in fetchedData.images) {
+                        fetchedImages.push({
+                            ...fetchedData.images[key]
                         });
                     }
-                    dispatch(fetchSuccess(target, fetchedData));
-                })
-                .catch(error => {
-                    dispatch(fail(error, target));
-                });
-        }
-    };
-};
 
-//Add
-/*
-const addBoardSuccess = (data, id) => {
-    return {
-        type: Actions.ADD_BOARD,
-        newBoard: {
-            ...data,
-            id: id
-        }
-    };
-};
+                    fetchedData.images = fetchedImages;
+                }
 
-export const addBoard = (name, image) => {
-    return dispatch => {
-        dispatch(start('boards'));
-
-        const board = {
-            name: name,
-            image: image
-        };
-
-        axios.post('/boards.json', board)
-            .then(response => {
-                dispatch(addBoardSuccess(board, response.data.name));
+                dispatch(openCardModalSuccess(cardId, listId, listName, fetchedData));
             })
             .catch(error => {
-                dispatch(fail(error, 'boards'));
+                dispatch(openCardModalFail(error));
             });
     };
 };
-*/
 
-const addListSudccess = (data, id) => {
+export const closeCardModal = () => {
     return {
-        type: Actions.ADD_LIST,
-        newList: {
-            ...data,
-            id: id
+        type: Actions.CLOSE_CARD_MODAL
+    };
+};
+
+
+export const handleCardDesc = (desc) => {
+    return {
+        type: Actions.HANDLE_CARD_DESC,
+        desc: desc
+    };
+};
+
+export const handleCardName = (name) => {
+    return {
+        type: Actions.HANDLE_CARD_NAME,
+        name: name
+    };
+};
+
+export const handleCardNewImage = (image) => {
+    let possibleIdItems = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let randomId = "";
+    let empty = false;
+
+    if (image === 'empty') {
+        empty = true;
+    }
+
+    for (let i = 0; i < 20; i++) {
+        randomId += possibleIdItems.charAt(Math.floor(Math.random() * possibleIdItems.length));
+    }
+
+    return {
+        type: Actions.HANDLE_CARD_IMAGE,
+        empty: empty,
+        newImage: {
+            ...image,
+            id: randomId
         }
     };
 };
 
-export const addLidst = (name, boardId) => {
-    return dispatch => {
-        dispatch(start('lists'));
-
-        const list = {
-            name: name,
-            parentId: boardId
-        };
-
-        axios.post('/lists.json', list)
-            .then(response => {
-                dispatch(addListSudccess(list, response.data.name));
-            })
-            .catch(error => {
-                dispatch(fail(error, 'lists'));
-            });
-    };
-};
-/*
-const addCardSuccess = (data, id) => {
+const removeCardImageSuccess = (id) => {
     return {
-        type: Actions.ADD_CARD,
-        newCard: {
-            ...data,
-            id: id
-        }
-    };
-};
-
-export const addCard = (name, listId) => {
-    return dispatch => {
-        dispatch(start('cardsSingle', listId));
-
-        const card = {
-            name: name,
-            parentId: listId
-        };
-
-        axios.post('/cards.json', card)
-            .then(response => {
-                dispatch(addCardSuccess(card, response.data.name));
-            })
-            .catch(error => {
-                dispatch(fail(error, 'cardsSingle'));
-            });
-    };
-};*/
-
-//Remove
-/*const removeChildrenSuccess = (target, id) => {
-    return {
-        type: Actions.REMOVE_CHILDREN,
-        target: target,
-        id: id
-        //////////////////
-    };
-};*/
-
-export const removeChildren = (target, id) => {
-    return dispatch => {
-
-    };
-};
-
-const removeSuccess = (target, id) => {
-    return {
-        type: Actions.REMOVE,
-        target: target,
+        type: Actions.REMOVE_CARD_IMAGE,
         id: id
     };
 };
 
-export const remove = (target, id) => {
-    return dispatch => {
-        dispatch(start(target));
+const removeCardImageSuccessAfter = () => {
+    return {
+        type: Actions.REMOVE_CARD_IMAGE_AFTER,
+    };
+};
 
-        axios.delete(`/${target}/${id}.json`)
+export const removeCardImage = (id) => {
+    return dispatch => {
+        dispatch(removeCardImageSuccess(id));
+
+        setTimeout(() => {
+            dispatch(removeCardImageSuccessAfter());
+        }, 1300);
+    };
+};
+
+const saveCardDataStart = () => {
+    return {
+        type: Actions.SAVE_CARD_DATA_START
+    };
+};
+
+const saveCardDataFail = (error) => {
+    return {
+        type: Actions.SAVE_CARD_DATA_FAIL,
+        error: error
+    };
+};
+
+const saveCardDataSuccess = (newData) => {
+    return {
+        type: Actions.SAVE_CARD_DATA_SUCCESS,
+        newData: newData
+    };
+};
+
+const saveCardDataSuccessAfter = () => {
+    return {
+        type: Actions.SAVE_CARD_DATA_SUCCESS_AFTER,
+    };
+};
+
+export const saveCardData = (boardId, listId, cardId, data) => {
+    return dispatch => {
+        dispatch(saveCardDataStart());
+        let newData = {};
+        let newImages = [];
+
+        if (data.newImage !== null && data.newImage !== undefined) {
+            if (data.images !== undefined) {
+                newData = {
+                    ...data,
+                    images: data.images.concat(data.newImage),
+                    newImage: null
+                };
+            } else {
+                newImages.push(data.newImage);
+
+                newData = {
+                    ...data,
+                    images: newImages,
+                    newImage: null
+                };
+            }
+        } else {
+            newData = data;
+        }
+
+        axios.put(
+            '/boards/' + boardId + '/lists/' + listId + '/cards/' + cardId + '.json', newData)
             .then(response => {
-                dispatch(removeSuccess(target, id));
-                dispatch(removeChildren(target, id));
+                dispatch(saveCardDataSuccess(newData));
+
+                setTimeout(() => {
+                    dispatch(saveCardDataSuccessAfter());
+                }, 3000);
             })
             .catch(error => {
-                dispatch(fail(error, target));
+                dispatch(saveCardDataFail(error));
             });
     };
 };
-
-const removeCardSingleSuccess = (id) => {
-    return {
-        type: Actions.REMOVE_CARD,
-        id: id
-    };
-};
-
-export const removeCard = (cardId, listId) => {
-    return dispatch => {
-        dispatch(start('cardsSingle', listId));
-
-        axios.delete(`/cards/${cardId}.json`)
-            .then(response => {
-                dispatch(removeCardSingleSuccess(cardId));
-            })
-            .catch(error => {
-                dispatch(fail(error, 'cardsSingle'));
-            });
-    };
-};
-
-/*
-//Edit
-export const editListNameSuccess = (newName, listId) => {
-    return {
-        type: Actions.EDIT_LIST_NAME_SUCCESS,
-        id: listId,
-        newName: newName
-    };
-};
-
-export const editListNameFail = (error) => {
-    return {
-        type: Actions.EDIT_LIST_NAME_FAIL,
-        error: error,
-    };
-};
-
-export const editListNameStart = () => {
-    return {
-        type: Actions.EDIT_LIST_NAME_START
-    };
-};
-
-export const editListName = (newName, listId) => {
-    return dispatch => {
-        dispatch(editListNameStart());
-
-        axios.put(`/lists/${listId}/name.json`, newName)
-            .then(response => {
-                dispatch(editListNameSuccess(newName, listId));
-            })
-            .catch(error => {
-                dispatch(editListNameFail());
-            });
-    };
-};*/

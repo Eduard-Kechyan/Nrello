@@ -72,7 +72,7 @@ class BoardModal extends Component {
     render() {
         return (
             <div className={["board-modal", this.props.show ? "board-modal-show" : null].join(' ')}>
-                <span className="board-modal-backdrop" onClick={this.resetAndClose}></span>
+                <span className="modal-backdrop" onClick={this.resetAndClose}></span>
                 <div className="board-modal-content d-flex flex-wrap">
                     <div className="board-modal-add">
                         <div className="board-modal-add-card">

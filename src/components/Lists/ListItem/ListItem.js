@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import styles from './ListItem.module.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {removeList, editListName, addCard} from "../../../store/index";
+import {removeList, editListName, openCardModal, addCard} from "../../../store/index";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router";
 import Spinner from "../../UI/Spinner/Spinner";
+import CardItem from '../../Cards/CardItem/CardItem';
 
 class ListItem extends Component {
     state = {
@@ -48,12 +49,20 @@ class ListItem extends Component {
 
         if (this.props.listToChange.listId === this.props.list.id) {
             cards = <Spinner/>;
-        } else if (this.props.list.cards !== undefined) {
+        } else if (this.props.list.cards !== undefined && this.props.list.cards.length > 0) {
             cards = (
                 <div className={styles["list-item-wrapper"]}>
                     <div className={styles["list-item-content"]}>
                         {this.props.list.cards.map(card => (
-                            <p key={card.name}>{card.name}</p>
+                            <CardItem
+                                key={card.id}
+                                card={card}
+                                openCard={() => this.props.openCardModal(
+                                    this.props.singleBoard.boardId,
+                                    this.props.list.id,
+                                    this.props.list.name,
+                                    card.id
+                                )}/>
                         ))}
                     </div>
                 </div>
@@ -88,7 +97,7 @@ class ListItem extends Component {
                                 placeholder='Enter card name...'/>
                         </label>
                         <div>
-                            <button disabled={this.state.newCardName === ''}><span>+</span>Add list</button>
+                            <button disabled={this.state.newCardName === ''}><span>+</span>Add card</button>
                             <span className={styles["add-card-cancel"]}>&times;</span>
                         </div>
                     </form>
@@ -111,6 +120,7 @@ const dispatchToProps = dispatch => {
         removeList: (listId, boardId) => dispatch(removeList(listId, boardId)),
         editListName: (newName, listId, boardId) => dispatch(editListName(newName, listId, boardId)),
         addCard: (name, boardId, listId) => dispatch(addCard(name, boardId, listId)),
+        openCardModal: (boardId, listId, listName, cardId) => dispatch(openCardModal(boardId, listId, listName, cardId)),
     }
 };
 

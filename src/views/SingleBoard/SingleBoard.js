@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import styles from './SingleBoard.module.scss';
-/*import {fetch, remove, addList} from "../../store/index";*/
 import {removeBoard, fetchSingleBoard, addList, removeList} from "../../store/index";
 import connect from "react-redux/es/connect/connect";
 import SingleHeader from '../../components/Header/SingleHeader';
 import AddNewList from '../../components/Lists/AddNewList/AddNewList';
 import ListItem from '../../components/Lists/ListItem/ListItem';
 import Spinner from "../../components/UI/Spinner/Spinner";
+import CardModal from '../../components/UI/Modal/CardModal/CardModal';
 
 class SingleBoard extends Component {
     state = {
@@ -81,6 +81,8 @@ class SingleBoard extends Component {
                         checkNewListName={this.checkNewListName}
                         newListName={this.state.newListName}/>
                 </div>
+
+                <CardModal />
             </div>
         );
     }
@@ -100,9 +102,6 @@ const dispatchToProps = dispatch => {
         removeBoard: (id) => dispatch(removeBoard(id)),
         addList: (name, boardId) => dispatch(addList(name, boardId)),
         removeList: (id, boardId) => dispatch(removeList(id, boardId)),
-        /*     fetch: (target, id) => dispatch(fetch(target, id)),
-             remove: (target, id) => dispatch(remove(target, id)),
-             addList: (name, boardId) => dispatch(addList(name, boardId)),*/
     }
 };
 

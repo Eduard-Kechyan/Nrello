@@ -6,5 +6,12 @@ export {
     addList,
     removeList,
     editListName,
-    addCard
+    addCard,
+    openCardModal,
+    closeCardModal,
+    handleCardDesc,
+    handleCardName,
+    handleCardNewImage,
+    removeCardImage,
+    saveCardData,
 }from './actions';
